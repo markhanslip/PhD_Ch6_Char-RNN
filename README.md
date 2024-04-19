@@ -15,4 +15,8 @@ The easiest way to run the program is to use the provided Colab notebook (click 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/markhanslip/PhD_Ch6_Char_RNN/blob/main/Chapter_6_Notebook_Char_RNN_v2.ipynb)
 
 To do: 
-- change the pitch analyser to CREPE. currently it uses Praat which works well on tenor saxophone (and of course voice) but doesn't generalise to lots of instruments. 
+- Change the pitch analyser to CREPE. Currently I'm using, Praat which works well on tenor saxophone (and of course voice) but doesn't generalise to lots of instruments. 
+
+The neural network architecture used here is Char-RNN which was originally developed by https://github.com/karpathy/char-rnn and adapted from https://github.com/spro/char-rnn.pytorch
+
+Pitch-based onset detection method is my own but Nick Collins had the idea first: https://composerprogrammer.com/research/pitchdetectforonset.pdf
