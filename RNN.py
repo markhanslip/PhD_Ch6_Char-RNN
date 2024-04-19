@@ -8,13 +8,8 @@ import time
 import numpy as np
 import string
 import os
-from pydub import AudioSegment
-from pydub.playback import _play_with_simpleaudio as play
 import threading
-import pyaudio
-import pydub.scipy_effects as effect
-from scipy import signal
-from lilypond_hash import notes_dict
+from NotesDict import notes_dict
 import subprocess
 
 # pyaudio.input_device_index=0
