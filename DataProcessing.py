@@ -1,3 +1,5 @@
+# 5 DEFINE DATASET PROCESSING FUNCTIONS
+
 import numpy as np
 from numpy import inf
 import parselmouth
@@ -6,9 +8,10 @@ import time
 
 class DataProcessing:
 
-    def __init__(self, audio_file, output_file):
+    def __init__(self, audio_array, sample_rate, output_file):
 
-        self.audio_file = audio_file
+        self.audio_array = audio_array
+        self.sample_rate = sample_rate
         self.output_file = output_file
         self.audio_data = None
         self.pitches = None
@@ -17,7 +20,7 @@ class DataProcessing:
 
     def load_audio(self):
 
-        self.audio_data = parselmouth.Sound(self.audio_file)
+        self.audio_data = parselmouth.Sound(values = self.audio_array, sampling_frequency = self.sample_rate)
         print('audio loaded')
 
     def get_freqs(self):
@@ -28,8 +31,6 @@ class DataProcessing:
         self.pitches = list(self.pitches)
         self.pitches = np.nan_to_num(self.pitches)
         print('extracted freqs')
-        # print(self.pitches)
-        # print(max(self.pitches))
 
     def freqs_to_MIDI(self):
 
@@ -38,12 +39,9 @@ class DataProcessing:
         self.pitches = np.around(self.pitches, decimals=1)
         print('converted freqs to MIDI')
         print(self.pitches)
-        # print(max(self.pitches))
-        # count zero values and replace with a single duration value:
 
     def get_onsets(self):
 
-        # work out which note values represent an onset and multiply the two vectors
         temp_onsets = np.ediff1d(self.pitches) #or d = diff(midi)
 
         temp_onsets = (temp_onsets <= -0.8) & (temp_onsets >= -44) | (temp_onsets >= 0.8)
@@ -51,7 +49,6 @@ class DataProcessing:
 
         # replace consecutive onsets with 0:
         temp_onsets = list(temp_onsets)
-        #print('temp onsets:', temp_onsets)
         self.onsets=[]
         for i, n in enumerate(temp_onsets):
             if n == 0:
@@ -62,10 +59,7 @@ class DataProcessing:
                 self.onsets.append(0)
 
         self.onsets = np.insert(self.onsets, 0, 0)
-        #print('onsets', self.onsets)
         self.pitches = self.onsets * self.pitches
-        print(self.pitches)
-        print(max(self.pitches))
         nz = np.flatnonzero(self.pitches)
         if max(self.pitches) > 44:
             self.pitches= self.pitches[nz[0]:] # this threw error
@@ -73,7 +67,6 @@ class DataProcessing:
         else:
             pass
         return self.pitches
-        print(self.pitches)
 
     def remove_zeros_for_pitches_only(self):
 
@@ -136,38 +129,10 @@ class DataProcessing:
                 if i % 2 == 0:
                     n = n+transposition
             self.output_data=self.output_data+aug_array
-            # print(len(p))
             aug_array = orig_array.copy()
 
-        # self.output_data = np.clip(self.output_data, 10, 99) #
         self.output_data = list(self.output_data)
         print('augmented data')
-
-    def float2int(self):
-
-        print(type(self.output_data))
-
-        for index, num in enumerate(self.output_data):
-            self.output_data[index] = int(num)
-
-        print("converted floats to integers for SeqGAN")
-
-    def reshape_data_for_seqGAN(self):
-
-        self.output_data = self.output_data.tolist()
-
-        while len(self.output_data) % 12 != 0:
-            self.output_data = self.output_data[:-1]
-
-    def write2file(self):
-
-        self.output_data = np.array(self.output_data)
-
-        # self.output_data = self.output_data.reshape((int(len(self.output_data)/12), 12))
-        np.savetxt(self.output_file, self.output_data, fmt='%2u', delimiter=' ', newline='\n')
-        print('saved output data to', self.output_file)
-        # else:
-            # pas
 
     def pitches2file(self):
 
