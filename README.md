@@ -13,3 +13,6 @@ The code in this repo will get you as far as step 6 ;)
 The easiest way to run the program is to use the provided Colab notebook (click on the widget below). It'll pull in one of my datasets from HuggingFace, do all the data pre-processing, train a model and generate some notation. You just need a Google account and a HuggingFace account.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/markhanslip/PhD_Ch6_Char_RNN/blob/main/Chapter_6_Notebook_Char_RNN_v2.ipynb)
+
+To do: 
+- change the pitch analyser to CREPE. currently it uses Praat which works well on tenor saxophone (and of course voice) but doesn't generalise to lots of instruments. 
