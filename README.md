@@ -16,7 +16,7 @@ The easiest way to run the program is to use the provided Colab notebook (click 
 
 To do: 
 - Change the pitch analyser to CREPE. Currently I'm using Praat which works well on tenor saxophone (and of course voice) but doesn't generalise to lots of instruments.
-- Grab the output of !apt-cache policy lilypond and add it as input to the lilypond markdown function in Generator.py to avoid future versioning issues (lilypond version is currently hard-coded). 
+- Grab the output of ```!apt-cache policy lilypond``` and add it as input to the lilypond markdown function in ```Generator.py``` to avoid future versioning issues (lilypond version is currently hard-coded). 
 
 The neural network architecture used here is Char-RNN which was originally developed by https://github.com/karpathy/char-rnn and adapted from https://github.com/spro/char-rnn.pytorch
 
