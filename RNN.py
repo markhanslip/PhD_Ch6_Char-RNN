@@ -12,8 +12,6 @@ import threading
 from NotesDict import notes_dict
 import subprocess
 
-# pyaudio.input_device_index=0
-
 class CharRNN(nn.Module):
     def __init__(self, input_size, hidden_size, output_size, n_layers=1):
         super(CharRNN, self).__init__()
@@ -289,33 +287,6 @@ class Generator:
         print('notes:', self.notes)
         return self.notes
 
-    def sample_playback(self, loop=3):
-
-        def sample_player(note, dur):
-            octave = random.choice([0])
-            if octave == -1:
-                dur = dur/2
-            if octave == 1:
-                dur = dur*2
-            snd = AudioSegment.from_file(self.samplelib[note])
-            snd = snd[:(dur*10)+500]
-            snd = snd.low_pass_filter(1800)
-            snd = snd.high_pass_filter(160)
-            snd = snd.fade_out(500)
-            # octaves = -0.25
-            new_sr = int(snd.frame_rate * (2.0 ** octave))
-            snd = snd._spawn(snd.raw_data, overrides={'frame_rate': new_sr})
-            snd = effect.band_pass_filter(snd, 300, 1300, order=5)
-            play(snd)
-
-        for i in range(loop): # while True:
-            for note, dur in zip(self.notes, self.durs):
-                sample_player(note, dur)
-                time.sleep(dur/100)
-                # t = threading.Thread(target=sample_player, args=(note, dur))
-                # t.start()
-            # time.sleep(dur/100)
-
     def pipe_to_lilypond(self, ly_file='CharRNN_output.ly', tempo_factor=1.5):
 
         rounds = np.array([1, 1.5, 2, 3, 4, 6, 8, 12, 16, 24, 32])
@@ -352,7 +323,7 @@ class Generator:
         if not os.path.exists(ly_file):
 
             lilypond = open(ly_file, 'w')
-            lilypond.write("\\" + "version " + '"2.22.2"')
+            lilypond.write("\\" + "version " + '"2.22.1"')
             lilypond.write('\n')
             lilypond.write('\n')
 
